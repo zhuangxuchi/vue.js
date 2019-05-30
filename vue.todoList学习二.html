@@ -10,7 +10,7 @@
         <h1>{{ title }}</h1>
         <input v-model="shuru" @keyup.enter="xinzeng"/>
         <ul>
-            <li v-for="(item,index) in items" :key="index" v-bind:class="{wanCheng:item.wancheng}" v-on:click="finish(item)">
+            <li v-for="(item,index) in items" :key="index" :class="{wanCheng:item.wancheng}" @click="finish(item)">
                 {{ item.todo }}
             </li>
         </ul>
