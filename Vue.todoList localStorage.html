@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>todoList localStorage</title>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>todoList</h1>
+        <span>输入计划:</span><input v-model="shuru" @keyup.enter="add">
+        <h3>未完成</h3>
+        <ul>
+            <li v-for="(todo,index) in todos" :key="index" v-if="!todo.isOver">
+                <input type="checkbox" v-model="todo.isOver" @click="finish">
+                {{todo.name}}
+                <button @click="del(index)">删除</button>
+            </li>
+        </ul>
+        <h3>已完成</h3>
+        <ul>
+            <li v-for="(todo,index) in todos" :key="index" v-if="todo.isOver" :class={isFinish:todo.isOver}>
+                <input type="checkbox" v-model="todo.isOver" @click="finish">
+                {{todo.name}}
+                <button @click="del(index)">删除</button>
+            </li>
+        </ul>
+        <button @click="remove">清空本地缓存</button>
+    </div>
+</body>
+<script>
+new Vue({
+    el:"#app",
+    data:{
+        shuru:"",
+        todos:[]
+    },
+    methods:{
+        add:function(){
+            this.todos.push({
+                name:this.shuru,
+                isOver:false
+            });
+            this.shuru="";
+            storage.set("list",this.todos)
+        },
+        finish:function(){
+            storage.set("list",this.todos)
+        },
+        del:function(index){
+            this.todos.splice(index,1);
+            storage.set("list",this.todos)
+        },
+        remove:function(){
+            storage.remove("list");
+            if(!storage.get("list")){
+                alert('已清空，请刷新页面')
+            }else{
+                alert('清空失败，，请重试')
+            }
+        }
+    },
+    mounted(){
+        var storage={
+            set:function (key,val) {
+                localStorage.setItem(key,JSON.stringify(val));
+            },
+            get:function (key) {
+                return JSON.parse(localStorage.getItem(key));
+            },
+            remove:function (key) {
+                localStorage.removeItem(key);
+            }
+        }
+        var list=storage.get("list");
+        if(list){
+            this.todos=list;
+        }
+    }
+})
+var storage={
+    set:function (key,val) {
+        localStorage.setItem(key,JSON.stringify(val));
+    },
+    get:function (key) {
+        return JSON.parse(localStorage.getItem(key));
+    },
+    remove:function (key) {
+        localStorage.removeItem(key);
+    }
+}
+</script>
+<style>
+.isFinish{
+    text-decoration:line-through;
+}
+</style>
+</html>
