@@ -4,6 +4,19 @@
 <meta charset="utf-8">
 <title>todoList localStorage</title>
 <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script>
+var storage={
+    set:function (key,val) {
+        localStorage.setItem(key,JSON.stringify(val));
+    },
+    get:function (key) {
+        return JSON.parse(localStorage.getItem(key));
+    },
+    remove:function (key) {
+        localStorage.removeItem(key);
+    }
+}
+</script>
 </head>
 <body>
     <div id="app">
@@ -61,34 +74,12 @@ new Vue({
         }
     },
     mounted(){
-        var storage={
-            set:function (key,val) {
-                localStorage.setItem(key,JSON.stringify(val));
-            },
-            get:function (key) {
-                return JSON.parse(localStorage.getItem(key));
-            },
-            remove:function (key) {
-                localStorage.removeItem(key);
-            }
-        }
         var list=storage.get("list");
         if(list){
             this.todos=list;
         }
     }
 })
-var storage={
-    set:function (key,val) {
-        localStorage.setItem(key,JSON.stringify(val));
-    },
-    get:function (key) {
-        return JSON.parse(localStorage.getItem(key));
-    },
-    remove:function (key) {
-        localStorage.removeItem(key);
-    }
-}
 </script>
 <style>
 .isFinish{
